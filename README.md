@@ -4,7 +4,7 @@
 
 The MCL algorithm was developed by Stijn van Dongen at the University of Utrecht.
 
-Details of the algorithm can be found in the thesis [Graph Clustering by Flow Simulation](http://www.library.uu.nl/digiarchief/dip/diss/1895620/inhoud.htm).
+Details of the algorithm can be found on the [MCL homepage](https://micans.org/mcl/).
 
 ### Isn't there already a python module for this?
 
