@@ -10,7 +10,7 @@ graph = np.matrix([
     [0, 0, 0, 1, 1, 1, 1]
 ])
 
-def normalize_columns(matrix):
+def normalize(matrix):
     """
     Normalize the columns of the given matrix
     
@@ -29,7 +29,7 @@ def inflate(matrix, power):
     :param power: Cluster inflation parameter
     :returns: The inflated matrix
     """
-    return normalize_columns(np.power(matrix, power))
+    return normalize(np.power(matrix, power))
 
 
 def expand(matrix, power):
@@ -81,7 +81,6 @@ def converged(matrix1, matrix2):
     
     :param matrix1: A numpy matrix
     :param matrix2: A numpy matrix
-    :param tolerance: Threshold for determining equality
     :returns: True if matrix1 and matrix2 approximately equal
     """
     return np.allclose(matrix1, matrix2) 
@@ -129,7 +128,7 @@ def run_mcl(matrix, expansion=2, inflation=2, loop_value=1,
     matrix = add_self_loops(matrix, loop_value)
     
     # Normalize
-    matrix = normalize_columns(matrix)
+    matrix = normalize(matrix)
     
     # iterations
     for i in range(iterations):

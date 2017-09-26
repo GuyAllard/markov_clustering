@@ -2,7 +2,7 @@ import pytest
 import numpy as np
 import markov_clustering as mc
 
-def test_normalize_column():
+def test_normalize():
     source = np.matrix([
         [1, 1, 0],
         [0, 1, 1],
@@ -15,7 +15,7 @@ def test_normalize_column():
         [0, 0,   0.5]
     ])
     
-    norm = mc.normalize_columns(source)
+    norm = mc.normalize(source)
     assert np.array_equal(norm, target)
 
 
@@ -108,5 +108,5 @@ def test_iterate():
         [ 0. ,  0. ,  0.5]
     ])
     
-    iterated = mc.normalize_columns(mc.iterate(source, 2, 2, 0.4))
+    iterated = mc.normalize(mc.iterate(source, 2, 2, 0.4))
     assert np.array_equal(iterated, target)
