@@ -93,3 +93,20 @@ def test_converged():
     ])
     
     assert mc.converged(source, source)
+
+
+def test_iterate():
+    source = np.matrix([
+        [1, 1, 0],
+        [1, 1, 1],
+        [0, 1, 1]
+    ])
+    
+    target = np.matrix([
+        [ 0.5,  0. ,  0. ],
+        [ 0.5,  1. ,  0.5],
+        [ 0. ,  0. ,  0.5]
+    ])
+    
+    iterated = mc.normalize_columns(mc.iterate(source, 2, 2, 0.4))
+    assert np.array_equal(iterated, target)

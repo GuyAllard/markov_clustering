@@ -87,6 +87,28 @@ def converged(matrix1, matrix2):
     return np.allclose(matrix1, matrix2) 
 
 
+def iterate(matrix, expansion, inflation, pruning):
+    """
+    Run a single iteration of the mcl algorithm
+    
+    :param matrix: Matrix to operate on
+    :param expansion: Cluster expansion factor
+    :param inflation: Cluster inflation factor
+    :param pruning: threshold for pruning
+    """
+    # Expansion
+    matrix = expand(matrix, expansion)
+  
+    # Inflation
+    matrix = inflate(matrix, inflation)
+        
+    # Pruning
+    if pruning > 0:
+        matrix = prune(matrix, pruning)
+    
+    return matrix
+    
+
 def run_mcl(matrix, expansion=2, inflation=2, loop_value=1,
             iterations=10, pruning=0.001, verbose=False):
     """
@@ -103,31 +125,26 @@ def run_mcl(matrix, expansion=2, inflation=2, loop_value=1,
                     set to 0
     :param verbose: Print extra information to the console
     """
-    # Step 1: Initialize self-loops
+    # Initialize self-loops
     matrix = add_self_loops(matrix, loop_value)
     
-    # Step 2: Normalize
+    # Normalize
     matrix = normalize_columns(matrix)
     
+    # iterations
     for i in range(iterations):
         # store current matrix for convergence checking
         last_mat = matrix.copy()
         
-        # Step 3: Expansion
-        matrix = expand(matrix, expansion)
-  
-        # Step 4: Inflation
-        matrix = inflate(matrix, inflation)
-        
-        # Step 5: Pruning (should be optional)
-        matrix = prune(matrix, pruning)
+        # perform MCL
+        matrix = iterate(matrix, expansion, inflation, pruning)
         
         if verbose:
             print(matrix)
         
-        # Step 6: Check for convergence
+        # Check for convergence
         if converged(matrix, last_mat):
             print("Converged after {} iterations".format(i))
             break
    
-    print(matrix)
+    return matrix
