@@ -11,5 +11,7 @@ Details of the algorithm can be found on the [MCL homepage](https://micans.org/m
 Yes and no.
 
 There is a module available on pypy called python_mcl which implements this algorithm.
-However, reading through the code reveals that the expansion and inflation operations are not performed in the correct order.
- 
+However, reading through the code reveals several issues:
+  - The expansion and inflation operations are not performed in the correct order.
+  - There is no support for sparse matrices
+  - There is no pruning performed
