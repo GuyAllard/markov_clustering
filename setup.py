@@ -11,11 +11,11 @@ setup(
     platforms=["linux"],
     packages=["markov_clustering"],
     install_requires=[
-        "click",
-        "numpy"
+        "numpy",
+        "scipy",
+        "scikit-learn"
     ],
     entry_points={
-        #"console_scripts": ['pipe-runner=pipe_runner.command_line:runner']
     },
     classifiers=[
         "Development Status :: 3 - Alpha",

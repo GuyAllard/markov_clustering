@@ -1,3 +1,5 @@
 pytest
 tox
 numpy
+scipy
+scikit-learn
