@@ -25,7 +25,7 @@ def normalize(matrix):
     """
     Normalize the columns of the given matrix
     
-    :param matrix: A numpy matrix
+    :param matrix: The matrix to be normalized
     :returns: The normalized matrix
     """
     return sklearn.preprocessing.normalize(matrix, norm="l1", axis=0)
@@ -35,7 +35,7 @@ def inflate(matrix, power):
     """
     Apply cluster inflation to the given matrix
     
-    :param matrix: A numpy matrix
+    :param matrix: The matrix to be inflated
     :param power: Cluster inflation parameter
     :returns: The inflated matrix
     """
@@ -49,7 +49,7 @@ def expand(matrix, power):
     """
     Apply cluster expansion to the given matrix
     
-    :param matrix: A numpy matrix
+    :param matrix: The matrix to be expanded
     :param power: Cluster expansion parameter
     :returns: The expanded matrix
     """
@@ -64,7 +64,7 @@ def add_self_loops(matrix, loop_value):
     Add self-loops to the matrix by setting the diagonal
     to loop_value
     
-    :param matrix: A numpy matrix
+    :param matrix: The matrix to add loops to
     :param loop_value: Value to use for self-loops
     :returns: The matrix with self-loops
     """
@@ -89,7 +89,7 @@ def prune(matrix, threshold):
     """
     Prune the matrix so that very small edges are removed
     
-    :param matrix: A numpy matrix
+    :param matrix: The matrix to be pruned
     :param threshold: The value below which edges will be removed
     :returns: The pruned matrix
     """
@@ -108,8 +108,8 @@ def converged(matrix1, matrix2):
     """
     Are matrix1 and matrix2 approximately equal?
     
-    :param matrix1: A numpy matrix
-    :param matrix2: A numpy matrix
+    :param matrix1: The matrix to compare with matrix2
+    :param matrix2: The matrix to compare with matrix1
     :returns: True if matrix1 and matrix2 approximately equal
     """
     if isspmatrix(matrix1) or isspmatrix(matrix2):
@@ -122,7 +122,7 @@ def iterate(matrix, expansion, inflation, pruning):
     """
     Run a single iteration of the mcl algorithm
     
-    :param matrix: Matrix to operate on
+    :param matrix: The matrix to perform the iteration on
     :param expansion: Cluster expansion factor
     :param inflation: Cluster inflation factor
     :param pruning: threshold for pruning
@@ -155,6 +155,7 @@ def run_mcl(matrix, expansion=2, inflation=2, loop_value=1,
     :param pruning: Threshold below which matrix elements will be set
                     set to 0
     :param verbose: Print extra information to the console
+    :returns the final matrix
     """
     # Initialize self-loops
     matrix = add_self_loops(matrix, loop_value)
