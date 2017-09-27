@@ -191,11 +191,17 @@ def get_clusters(matrix):
               contains the indices of the nodes belonging to the cluster
     """
     if not isspmatrix(matrix):
+        # cast to sparse so that we don't need to handle different 
+        # matrix types
         matrix = csc_matrix(matrix)
     
+    # get the attractors - non-zero elements of the matrix diagonal
     attractors = matrix.diagonal().nonzero()[0]
+    
+    # somewhere to put the clusters
     clusters = set()
     
+    # the nodes in the same row as each attractor form a cluster
     for attractor in attractors:
         cluster = tuple(matrix.getrow(attractor).nonzero()[1].tolist())
         clusters.add(cluster)
