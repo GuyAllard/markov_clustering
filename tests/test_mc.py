@@ -61,6 +61,24 @@ test_matrices = [
          [ 0.5,  1. ,  0.5],
          [ 0. ,  0. ,  0.5]]
     ),
+    (
+        # mcl algorithm
+        [[1, 1, 1, 0, 0, 0, 0],
+         [1, 1, 1, 0, 0, 0, 0],
+         [1, 1, 1, 1, 0, 0, 0],
+         [0, 0, 1, 1, 1, 0, 1],
+         [0, 0, 0, 1, 1, 1, 1],
+         [0, 0, 0, 0, 1, 1, 1],
+         [0, 0, 0, 1, 1, 1, 1]],
+         
+         [[0., 0., 0., 0., 0., 0., 0.],
+          [0., 0., 0., 0., 0., 0., 0.],
+          [1., 1., 1., 0., 0., 0., 0.],
+          [0., 0., 0., 0., 0., 0., 0.],
+          [0., 0., 0., 0.5, 0.5, 0.5, 0.5],
+          [0., 0., 0., 0., 0., 0., 0.],
+          [0., 0., 0., 0.5, 0.5, 0.5, 0.5]]
+    ),
 ]
 
 def test_normalize():
@@ -175,3 +193,33 @@ def test_iterate_sparse():
     
     iterated = mc.normalize(mc.iterate(source, 2, 2, 0.4)).todense()
     assert np.array_equal(iterated, target)
+
+
+def test_mcl():
+    source = np.matrix(test_matrices[7][0])
+    target = np.matrix(test_matrices[7][1])
+    
+    result = mc.run_mcl(source)
+    assert np.array_equal(np.round(result,4), np.round(target, 4))
+
+
+def test_mcl_sparse():
+    source = csc_matrix(test_matrices[7][0])
+    target = np.matrix(test_matrices[7][1])
+    
+    result = mc.run_mcl(source).todense()
+    assert np.array_equal(np.round(result, 4), np.round(target, 4))
+
+
+def test_get_clusters():
+    source = np.matrix(test_matrices[7][1])
+    target = {(0,1,2), (3,4,5,6)}
+    result = mc.get_clusters(source)
+    assert result == target
+
+
+def test_get_clusers_sparse():
+    source = csc_matrix(test_matrices[7][1])
+    target = {(0,1,2), (3,4,5,6)}
+    result = mc.get_clusters(source)
+    assert result == target
