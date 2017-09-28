@@ -1,12 +1,37 @@
+import os
 from setuptools import setup
+import sys
+
+if sys.version_info[0] < 3:
+    raise Exception('markov_clustering requires Python 3')
+
+distmeta = {}
+for line in open(os.path.join('markov_clustering', '__init__.py')):
+    try:
+        field, value = (x.strip() for x in line.split('='))
+    except ValueError:
+        continue
+    if field == '__version_info__':
+        value = value.strip('[]()')
+        value = '.'.join(x.strip(' \'"') for x in value.split(','))
+    else:
+        value = value.strip('\'"')
+    distmeta[field] = value
+    
+try:
+    with open("README.md") as readme:
+        long_description = readme.read()
+except IOError:
+    long_description = "See {}".format(distmeta["__homepage__"])
 
 setup(
     name="markov_clustering",
-    version="0.0.1",
+    version=distmeta["__version_info__"],
     description="Implementation of the Markov clustering (MCL) algorithm in python.",
-    autor="Guy Allard",
-    author_email="w.g.allard AT lumc DOT nl",
-    url="https://git.lumc.nl/wgallard/markov_clustering.git",
+    long_description=long_description,
+    author=distmeta["__author__"],
+    author_email=distmeta["__contact__"],
+    url=distmeta["__homepage__"],
     license="MIT",
     platforms=["linux"],
     packages=["markov_clustering"],
