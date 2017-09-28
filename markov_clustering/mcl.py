@@ -1,6 +1,7 @@
 import numpy as np
 from scipy.sparse import isspmatrix, dok_matrix, csc_matrix
 import sklearn.preprocessing
+from .utils import MessagePrinter
 
 graph = np.matrix([
     [1, 1, 1, 0, 0, 0, 0],
@@ -118,70 +119,23 @@ def converged(matrix1, matrix2):
     return np.allclose(matrix1, matrix2) 
 
 
-def iterate(matrix, expansion, inflation, pruning):
+def iterate(matrix, expansion, inflation):
     """
     Run a single iteration of the mcl algorithm
     
     :param matrix: The matrix to perform the iteration on
     :param expansion: Cluster expansion factor
     :param inflation: Cluster inflation factor
-    :param pruning: threshold for pruning
     """
     # Expansion
     matrix = expand(matrix, expansion)
   
     # Inflation
     matrix = inflate(matrix, inflation)
-        
-    # Pruning
-    if pruning > 0:
-        matrix = prune(matrix, pruning)
-    
+
     return matrix
     
-
-def run_mcl(matrix, expansion=2, inflation=2, loop_value=1,
-            iterations=10, pruning=0.001, verbose=False):
-    """
-    Perform MCL on the given similarity matrix
     
-    :param matrix: The similarity matrix to cluster
-    :param expansion: The cluster expansion factor
-    :param inflation: The cluster inflation factor
-    :param loop_value: Initialization value for self-loops
-    :param iterations: Maximum number of iterations
-                       (actual number of iterations will be less if
-                        convergence is reached)
-    :param pruning: Threshold below which matrix elements will be set
-                    set to 0
-    :param verbose: Print extra information to the console
-    :returns the final matrix
-    """
-    # Initialize self-loops
-    matrix = add_self_loops(matrix, loop_value)
-    
-    # Normalize
-    matrix = normalize(matrix)
-    
-    # iterations
-    for i in range(iterations):
-        # store current matrix for convergence checking
-        last_mat = matrix.copy()
-        
-        # perform MCL
-        matrix = iterate(matrix, expansion, inflation, pruning)
-        
-        if verbose:
-            print(matrix)
-        
-        # Check for convergence
-        if converged(matrix, last_mat):
-            print("Converged after {} iterations".format(i))
-            break
-   
-    return matrix
-
-
 def get_clusters(matrix):
     """
     Retrieve the clusters from the matrix
@@ -207,3 +161,85 @@ def get_clusters(matrix):
         clusters.add(cluster)
     
     return clusters
+
+
+def run_mcl(matrix, expansion=2, inflation=2, loop_value=1,
+            iterations=100, pruning_threshold=0.001, pruning_frequency=1,
+            convergence_check_frequency=1, verbose=False):
+    """
+    Perform MCL on the given similarity matrix
+    
+    :param matrix: The similarity matrix to cluster
+    :param expansion: The cluster expansion factor
+    :param inflation: The cluster inflation factor
+    :param loop_value: Initialization value for self-loops
+    :param iterations: Maximum number of iterations
+           (actual number of iterations will be less if
+            convergence is reached)
+    :param pruning_threshold: Threshold below which matrix elements will be set
+           set to 0
+    :param pruning_frequency: Perform pruning every 'pruning_frequency'
+           iterations. 
+    :param convergence_check_frequency: Perform the check for convergence
+           every convergence_check_frequency iterations
+    :param verbose: Print extra information to the console
+    :returns: The final matrix
+    """
+    assert expansion > 1, "Invalid expansion parameter"
+    assert inflation > 1, "Invalid inflation parameter"
+    assert loop_value >= 0, "Invalid loop_value"
+    assert iterations > 0, "Invalid number of iterations"
+    assert pruning_threshold >= 0, "Invalid pruning_threshold"
+    assert pruning_frequency > 0, "Invalid pruning_frequency"
+    assert convergence_check_frequency > 0, "Invalid convergence_check_frequency"
+    
+    printer = MessagePrinter(verbose)
+    
+    printer.print("-" * 50)
+    printer.print("MCL Parameters")
+    printer.print("Expansion: {}".format(expansion))
+    printer.print("Inflation: {}".format(inflation))
+    if pruning_threshold > 0:
+        printer.print("Pruning threshold: {}, frequency: {} iteration{}".format(
+                    pruning_threshold, pruning_frequency, "s" if pruning_frequency > 1 else ""))
+    else:
+        printer.print("No pruning")
+    printer.print("Convergence check: {} iteration{}".format(
+                    convergence_check_frequency, "s" if pruning_frequency > 1 else ""))
+    printer.print("Maximum iterations: {}".format(iterations))
+    printer.print("{} matrix mode".format("Sparse" if isspmatrix(matrix) else "Dense"))
+    printer.print("-" * 50)
+    
+    # Initialize self-loops
+    if loop_value > 0:
+        matrix = add_self_loops(matrix, loop_value)
+    
+    # Normalize
+    matrix = normalize(matrix)
+    
+    # iterations
+    for i in range(iterations):
+        printer.print("Iteration {}".format(i + 1))
+            
+        # store current matrix for convergence checking
+        last_mat = matrix.copy()
+        
+        # perform MCL expansion and inflation
+        matrix = iterate(matrix, expansion, inflation)
+        
+        # prune
+        if pruning_threshold > 0 and i % pruning_frequency == pruning_frequency - 1:
+            printer.print("Pruning")
+            matrix = prune(matrix, pruning_threshold)
+        
+        # Check for convergence
+        if i % convergence_check_frequency == convergence_check_frequency - 1:
+            printer.print("Checking for convergence")
+            if converged(matrix, last_mat):
+                printer.print("Converged after {} iteration{}".format(i + 1, "s" if i > 0 else ""))
+                break
+   
+    printer.print("-" * 50)
+    
+    return matrix
+

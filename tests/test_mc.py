@@ -57,9 +57,9 @@ test_matrices = [
          [1, 1, 1],
          [0, 1, 1]],
     
-        [[ 0.5,  0. ,  0. ],
-         [ 0.5,  1. ,  0.5],
-         [ 0. ,  0. ,  0.5]]
+        [[ 0.44444444,  0.23529412,  0.11111111],
+         [ 0.44444444,  0.52941176,  0.44444444],
+         [ 0.11111111,  0.23529412,  0.44444444]]
     ),
     (
         # mcl algorithm
@@ -183,16 +183,16 @@ def test_iterate():
     source = np.matrix(test_matrices[6][0])
     target = np.matrix(test_matrices[6][1])
     
-    iterated = mc.normalize(mc.iterate(source, 2, 2, 0.4))
-    assert np.array_equal(iterated, target)
+    iterated = mc.normalize(mc.iterate(source, 2, 2))
+    assert np.array_equal(np.round(iterated, 4), np.round(target, 4))
 
 
 def test_iterate_sparse():
     source = csc_matrix(test_matrices[6][0])
     target = np.matrix(test_matrices[6][1])
     
-    iterated = mc.normalize(mc.iterate(source, 2, 2, 0.4)).todense()
-    assert np.array_equal(iterated, target)
+    iterated = mc.normalize(mc.iterate(source, 2, 2)).todense()
+    assert np.array_equal(np.round(iterated, 4), np.round(target, 4))
 
 
 def test_mcl():
