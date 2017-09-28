@@ -213,13 +213,13 @@ def test_mcl_sparse():
 
 def test_get_clusters():
     source = np.matrix(test_matrices[7][1])
-    target = {(0,1,2), (3,4,5,6)}
+    target = [(0,1,2), (3,4,5,6)]
     result = mc.get_clusters(source)
     assert result == target
 
 
 def test_get_clusers_sparse():
     source = csc_matrix(test_matrices[7][1])
-    target = {(0,1,2), (3,4,5,6)}
+    target = [(0,1,2), (3,4,5,6)]
     result = mc.get_clusters(source)
     assert result == target
