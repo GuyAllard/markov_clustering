@@ -45,12 +45,17 @@ matrix, thereby further reducing the number of calculations per iteration.
 
 ### Installation
 
-TODO
+The recommended installation method is via pip.
 
+To install with all requirements including support for visualization:  
+```
+pip install markov_clustering[drawing]
+```
 
-### Usage
-
-TODO
+To install with only support for the core MCL clustering:  
+```
+pip install markov_clustering
+```
 
 
 ### Example
