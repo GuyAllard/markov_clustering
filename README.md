@@ -99,4 +99,14 @@ disable labels and set the color for edges.
 ```python
 mc.draw_graph(matrix, clusters, pos=positions, node_size=50, with_labels=False, edge_color="silver")
 ```
-This should result in an image similar to the one at the top of this section.  
+This should result in an image similar to the one at the top of this section. 
+
+
+If the clustering is too fine for your taste, reducing the MCL inflation parameter to 1.4 (from the default of 2)
+will result in coarser clustering. e.g.
+```
+result = mc.run_mcl(matrix, inflation=1.4)
+clusters = mc.get_clusters(result)
+mc.draw_graph(matrix, clusters, pos=positions, node_size=50, with_labels=False, edge_color="silver")
+```
+![coarse example](/static/example_coarse.png)
