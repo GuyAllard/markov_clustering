@@ -35,6 +35,7 @@ setup(
     license="MIT",
     platforms=["linux"],
     packages=["markov_clustering"],
+    python_requires='~=3.0',
     install_requires=[
         "numpy",
         "scipy",
