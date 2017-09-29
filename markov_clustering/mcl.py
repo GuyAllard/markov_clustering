@@ -34,7 +34,8 @@ def normalize(matrix):
 
 def inflate(matrix, power):
     """
-    Apply cluster inflation to the given matrix
+    Apply cluster inflation to the given matrix by raising
+    each element to the given power.
     
     :param matrix: The matrix to be inflated
     :param power: Cluster inflation parameter
@@ -48,7 +49,8 @@ def inflate(matrix, power):
 
 def expand(matrix, power):
     """
-    Apply cluster expansion to the given matrix
+    Apply cluster expansion to the given matrix by raising
+    the matrix to the given power.
     
     :param matrix: The matrix to be expanded
     :param power: Cluster expansion parameter
@@ -107,7 +109,8 @@ def prune(matrix, threshold):
 
 def converged(matrix1, matrix2):
     """
-    Are matrix1 and matrix2 approximately equal?
+    Check for convergence by determining if 
+    matrix1 and matrix2 are approximately equal.
     
     :param matrix1: The matrix to compare with matrix2
     :param matrix2: The matrix to compare with matrix1
@@ -121,7 +124,7 @@ def converged(matrix1, matrix2):
 
 def iterate(matrix, expansion, inflation):
     """
-    Run a single iteration of the mcl algorithm
+    Run a single iteration (expansion + inflation) of the mcl algorithm
     
     :param matrix: The matrix to perform the iteration on
     :param expansion: Cluster expansion factor
@@ -205,7 +208,7 @@ def run_mcl(matrix, expansion=2, inflation=2, loop_value=1,
     else:
         printer.print("No pruning")
     printer.print("Convergence check: {} iteration{}".format(
-                    convergence_check_frequency, "s" if pruning_frequency > 1 else ""))
+                    convergence_check_frequency, "s" if convergence_check_frequency > 1 else ""))
     printer.print("Maximum iterations: {}".format(iterations))
     printer.print("{} matrix mode".format("Sparse" if isspmatrix(matrix) else "Dense"))
     printer.print("-" * 50)

@@ -29,13 +29,18 @@ matrix, thereby further reducing the number of calculations per iteration.
 
 ### Requirements
 
-- Python 3.x
-- numpy
-- scipy
-- scikit-learn
+- Core requirements
+  - Python 3.x
+  - numpy
+  - scipy
+  - scikit-learn
 
-To run the tests
-- pytest
+- Optional (required for visualization)
+  - networkx
+  - matplotlib 
+
+- To run the tests
+  - pytest
 
 
 ### Installation

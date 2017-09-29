@@ -38,8 +38,11 @@ setup(
     install_requires=[
         "numpy",
         "scipy",
-        "scikit-learn"
+        "scikit-learn",
     ],
+    extras_require={
+        "drawing": ["networkx", "matplotlib"]
+    },
     entry_points={
     },
     classifiers=[
