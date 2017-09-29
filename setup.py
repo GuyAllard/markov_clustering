@@ -18,11 +18,7 @@ for line in open(os.path.join('markov_clustering', '__init__.py')):
         value = value.strip('\'"')
     distmeta[field] = value
     
-try:
-    with open("README.md") as readme:
-        long_description = readme.read()
-except IOError:
-    long_description = "See {}".format(distmeta["__homepage__"])
+long_description = "See {}".format(distmeta["__homepage__"])
 
 setup(
     name="markov_clustering",
@@ -50,10 +46,10 @@ setup(
         "Development Status :: 3 - Alpha",
         "Intended Audience :: Developers",
         "Intended Audience :: Science/Research",
-        "Operating System :: Linux",
+        "Operating System :: POSIX :: Linux",
         "Programming Language :: Python",
         "Topic :: Scientific/Engineering",
-        "License :: MIT License",
+        "License :: OSI Approved :: MIT License",
     ],
     keywords = "bioinformatics clustering"
 )
