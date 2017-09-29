@@ -8,7 +8,7 @@ except ImportError:
     raise
     
 try:
-    from matplotlib.pylab import show, cm
+    from matplotlib.pylab import show, cm, axis
 except ImportError:
     print("Matplotlib not present")
     raise
@@ -37,4 +37,5 @@ def draw_graph(matrix, clusters, **kwargs):
     
     # draw
     nx.draw_networkx(graph, node_color=colors, **kwargs)
+    axis("off")
     show(block=False)
