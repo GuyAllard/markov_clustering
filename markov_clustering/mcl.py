@@ -3,16 +3,6 @@ from scipy.sparse import isspmatrix, dok_matrix, csc_matrix
 import sklearn.preprocessing
 from .utils import MessagePrinter
 
-graph = np.matrix([
-    [1, 1, 1, 0, 0, 0, 0],
-    [1, 1, 1, 0, 0, 0, 0],
-    [1, 1, 1, 1, 0, 0, 0],
-    [0, 0, 1, 1, 1, 0, 1],
-    [0, 0, 0, 1, 1, 1, 1],
-    [0, 0, 0, 0, 1, 1, 1],
-    [0, 0, 0, 1, 1, 1, 1]
-])
-
 
 def sparse_allclose(a, b, rtol=1e-5, atol=1e-8):
     """
