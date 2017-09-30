@@ -1,4 +1,5 @@
 # Markov Clustering
+[![Documentation Status](https://readthedocs.org/projects/markov-clustering/badge/)](http://markov-clustering.readthedocs.io/en/latest/)
 
 This module implements of the MCL algorithm in python.
 
