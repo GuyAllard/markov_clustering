@@ -95,4 +95,4 @@ result = mc.run_mcl(matrix, inflation=1.4)
 clusters = mc.get_clusters(result)
 mc.draw_graph(matrix, clusters, pos=positions, node_size=50, with_labels=False, edge_color="silver")
 ```
-![coarse example](/static/example_coarse.png)
+![coarse example](static/example_coarse.png)

@@ -21,8 +21,8 @@ def draw_graph(matrix, clusters, **kwargs):
     :param matrix: The unprocessed adjacency matrix
     :param clusters: list of tuples containing clusters as returned
                      by 'get_clusters'
-    :param **kwargs: Additional keyword arguments to be passed to
-                     networkx.draw_networkx
+    :param kwargs: Additional keyword arguments to be passed to
+                   networkx.draw_networkx
     """
     # make a networkx graph from the adjacency matrix
     graph = nx.Graph(matrix)
