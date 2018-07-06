@@ -81,7 +81,8 @@ def add_self_loops(matrix, loop_value):
 
 def prune(matrix, threshold):
     """
-    Prune the matrix so that very small edges are removed
+    Prune the matrix so that very small edges are removed.
+    The maximum value in each column is never pruned.
     
     :param matrix: The matrix to be pruned
     :param threshold: The value below which edges will be removed
@@ -94,6 +95,12 @@ def prune(matrix, threshold):
     else:
         pruned = matrix.copy()
         pruned[pruned < threshold] = 0
+
+    # keep max value in each column. same behaviour for dense/sparse
+    num_cols = matrix.shape[1]
+    row_indices = matrix.argmax(axis=0).reshape((num_cols,))
+    col_indices = np.arange(num_cols)
+    pruned[row_indices, col_indices] = matrix[row_indices, col_indices]
 
     return pruned
 
