@@ -45,6 +45,10 @@ def modularity(matrix, result):
 	:returns: modularity value
 	"""
 	matrix = convert_to_adjacency_matrix(matrix)
+
+	# makes sure result[i,j]>0 if i and j belong to the same cluster
+	result = result + result.T
+	
 	m = matrix.sum()
 
 	if isspmatrix(matrix):
