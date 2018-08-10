@@ -39,13 +39,21 @@ def convert_to_adjacency_matrix(matrix):
 
 
 def delta_matrix(matrix, clusters):
+     """
+    Compute delta matrix where delta[i,j]=1 if i and j belong
+    to same cluster and i=!j
+
+    :param matrix: The adjacency matrix
+    :param clusters: The clusters returned by get_clusters
+    :returns: delta matrix
+    """
     if isspmatrix(matrix):
         delta = dok_matrix(matrix.shape)
     else :
         delta = np.zeros(matrix.shape)
 
     for i in clusters :
-        for j in combinations(l, 2):
+        for j in combinations(i, 2):
             delta[j] = 1
 
     return delta
@@ -60,8 +68,6 @@ def modularity(matrix, clusters):
     :returns: modularity value
     """
     matrix = convert_to_adjacency_matrix(matrix)
-    delta  = delta_matrix(clusters)
-    
     m = matrix.sum()
 
     if isspmatrix(matrix):
@@ -75,7 +81,9 @@ def modularity(matrix, clusters):
     else:
         expected = lambda i,j : ( matrix_2[i,:].sum()*matrix[:,j].sum() )
     
+    delta   = delta_matrix(clusters)
     indices = np.array(delta.nonzero())
+    
     Q = sum( matrix[i, j] - expected(i, j)/m for i, j in indices.T )/m
     
     return Q
