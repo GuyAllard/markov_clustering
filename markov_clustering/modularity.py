@@ -1,3 +1,7 @@
+"""
+Computation of the modularity of a clustering
+"""
+
 import numpy as np
 from fractions import Fraction
 from itertools import permutations
@@ -41,7 +45,7 @@ def convert_to_adjacency_matrix(matrix):
 def delta_matrix(matrix, clusters):
     """
     Compute delta matrix where delta[i,j]=1 if i and j belong
-    to same cluster and i=!j
+    to same cluster and i!=j
     
     :param matrix: The adjacency matrix
     :param clusters: The clusters returned by get_clusters
