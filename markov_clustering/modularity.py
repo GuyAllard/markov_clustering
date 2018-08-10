@@ -62,8 +62,8 @@ def modularity(matrix, result):
     else:
         expected = lambda i,j : ( matrix_2[i,:].sum()*matrix[:,j].sum() )
     
-    indeces = np.array(result.nonzero())
-    Q = sum( matrix[i, j] - expected(i, j)/m for i, j in indeces.T )/m
+    indices = np.array(result.nonzero())
+    Q = sum( matrix[i, j] - expected(i, j)/m for i, j in indices.T if i != j )/m
     
     return Q
     
