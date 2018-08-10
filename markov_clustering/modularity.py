@@ -1,5 +1,7 @@
 import numpy as np
 from fractions import Fraction
+from itertools import combinations
+
 from scipy.sparse import isspmatrix, dok_matrix, find
 from .mcl import sparse_allclose
 
@@ -36,18 +38,29 @@ def convert_to_adjacency_matrix(matrix):
     return matrix
 
 
-def modularity(matrix, result):
+def delta_matrix(matrix, clusters):
+    if isspmatrix(matrix):
+        delta = dok_matrix(matrix.shape)
+    else :
+        delta = np.zeros(matrix.shape)
+
+    for i in clusters :
+        for j in combinations(l, 2):
+            delta[j] = 1
+
+    return delta
+
+
+def modularity(matrix, clusters):
     """
     Compute the modularity
 
     :param matrix: The adjacency matrix
-    :param result: The matrix result of mcl
+    :param clusters: The clusters returned by get_clusters
     :returns: modularity value
     """
     matrix = convert_to_adjacency_matrix(matrix)
-
-    # makes sure result[i,j]>0 if i and j belong to the same cluster
-    result = result + result.T
+    delta  = delta_matrix(clusters)
     
     m = matrix.sum()
 
@@ -62,8 +75,7 @@ def modularity(matrix, result):
     else:
         expected = lambda i,j : ( matrix_2[i,:].sum()*matrix[:,j].sum() )
     
-    indices = np.array(result.nonzero())
-    Q = sum( matrix[i, j] - expected(i, j)/m for i, j in indices.T if i != j )/m
+    indices = np.array(delta.nonzero())
+    Q = sum( matrix[i, j] - expected(i, j)/m for i, j in indices.T )/m
     
     return Q
-    
