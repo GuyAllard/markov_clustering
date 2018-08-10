@@ -1,6 +1,6 @@
 import numpy as np
 from fractions import Fraction
-from itertools import combinations
+from itertools import permutations
 
 from scipy.sparse import isspmatrix, dok_matrix, find
 from .mcl import sparse_allclose
@@ -30,7 +30,7 @@ def convert_to_adjacency_matrix(matrix):
         if isspmatrix(matrix):
             col = find(matrix[:,i])[2]
         else:
-            col = matrix[:,i]
+            col = matrix[:,i].T.tolist()[0]
 
         coeff = max( Fraction(c).limit_denominator().denominator for c in col )
         matrix[:,i] *= coeff
@@ -39,21 +39,21 @@ def convert_to_adjacency_matrix(matrix):
 
 
 def delta_matrix(matrix, clusters):
-     """
+    """
     Compute delta matrix where delta[i,j]=1 if i and j belong
     to same cluster and i=!j
-
+    
     :param matrix: The adjacency matrix
     :param clusters: The clusters returned by get_clusters
     :returns: delta matrix
     """
     if isspmatrix(matrix):
         delta = dok_matrix(matrix.shape)
-    else :
+    else:
         delta = np.zeros(matrix.shape)
 
     for i in clusters :
-        for j in combinations(i, 2):
+        for j in permutations(i, 2):
             delta[j] = 1
 
     return delta
@@ -81,7 +81,7 @@ def modularity(matrix, clusters):
     else:
         expected = lambda i,j : ( matrix_2[i,:].sum()*matrix[:,j].sum() )
     
-    delta   = delta_matrix(clusters)
+    delta   = delta_matrix(matrix, clusters)
     indices = np.array(delta.nonzero())
     
     Q = sum( matrix[i, j] - expected(i, j)/m for i, j in indices.T )/m

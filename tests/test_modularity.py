@@ -1,7 +1,7 @@
 import pytest
 import numpy as np
-import markov_clustering as mc
 from scipy.sparse import csc_matrix
+import markov_clustering as mc
 
 test_matrices = [
     (   # is undirected
@@ -47,7 +47,7 @@ test_matrices = [
          [0  , 0  , 0  , 0  , 1/4, 1/3, 1/4],
          [0  , 0  , 0  , 1/4, 1/4, 1/3, 1/4]],
          
-         -0.8576
+         -284/625
     ),
 ]
 
@@ -55,7 +55,7 @@ def test_is_undirected_1():
     source = np.matrix(test_matrices[0][0])
     target = test_matrices[0][1]
     
-    norm = mc.test_is_undirected(source)
+    norm = mc.is_undirected(source)
     assert norm == target
 
 
@@ -63,7 +63,7 @@ def test_is_undirected_1_sparse():
     source = csc_matrix(test_matrices[0][0])
     target = test_matrices[0][1]
     
-    norm = mc.test_is_undirected(source)
+    norm = mc.is_undirected(source)
     assert norm == target
 
 
@@ -71,7 +71,7 @@ def test_is_undirected_2():
     source = np.matrix(test_matrices[1][0])
     target = test_matrices[1][1]
     
-    norm = mc.test_is_undirected(source)
+    norm = mc.is_undirected(source)
     assert norm == target
 
 
@@ -79,7 +79,7 @@ def test_is_undirected_2_sparse():
     source = csc_matrix(test_matrices[1][0])
     target = test_matrices[1][1]
     
-    norm = mc.test_is_undirected(source)
+    norm = mc.is_undirected(source)
     assert norm == target
 
 
@@ -103,29 +103,31 @@ def test_delta_matrix():
     source = test_matrices[3][0]
     target = np.matrix(test_matrices[3][1])
     
-    converted = mc.delta_matrix(np.matrix(test_matrices[4][0]), source)
-    assert np.array_equal(converted, target)
+    delta = mc.delta_matrix(np.matrix(test_matrices[4][0]), source)
+    assert np.array_equal(delta, target)
 
 
 def test_delta_matrix_sparse():
     source = test_matrices[3][0]
-    target = csc_matrix(test_matrices[3][1])
+    target = np.matrix(test_matrices[3][1])
     
-    converted = mc.delta_matrix( csc_matrix(test_matrices[4][0]) ,source).todense()
-    assert np.array_equal(converted, target)
+    delta = mc.delta_matrix( csc_matrix(test_matrices[4][0]), source).todense()
+    assert np.array_equal(delta, target)
 
 
 def test_modularity():
     source = np.matrix(test_matrices[4][0])
     target = test_matrices[4][1]
-    
-    quality = mc.modularity(source, mc.run_mcl(source))
-    assert quality == target
+    clusters = mc.get_clusters(mc.run_mcl(source))
+
+    quality = mc.modularity(source, clusters)
+    assert np.isclose(quality, target)
 
 
 def test_modularity_sparse():
     source = csc_matrix(test_matrices[4][0])
     target = test_matrices[4][1]
+    clusters = mc.get_clusters(mc.run_mcl(source))
     
-    quality = mc.modularity(source, mc.run_mcl(source))
-    assert quality == target
+    quality = mc.modularity(source, clusters)
+    assert np.isclose(quality, target)
