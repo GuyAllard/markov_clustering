@@ -96,3 +96,57 @@ clusters = mc.get_clusters(result)
 mc.draw_graph(matrix, clusters, pos=positions, node_size=50, with_labels=False, edge_color="silver")
 ```
 ![coarse example](static/example_coarse.png)
+
+
+## Choosing Hyperparameters
+
+Choosing appropriate values for hyperparameters (e.g. cluster inflation/expansion parameters) can be difficult.  
+
+To assist with the evaluation of the clustering quality, we include an implementation of the modularity measure.
+Refer to 'Malliaros, Fragkiskos D., and Michalis Vazirgiannis. "Clustering and community detection in directed networks: A survey." Physics Reports 533.4 (2013): 95-142'
+for a detailed description.  
+
+Briefly, the modularity (Q) can be considered to be the fraction of graph edges which belong to a cluster 
+minus the fraction expected due to random chance, where the value of Q lies in the range [-1, 1]. High, positive
+Q values suggest higher clustering quality.  
+
+We can use the modularity measure to optimize the clustering parameters. In the following example,
+we will determine the modularity for a range of cluster inflation values, allowing us to pick the best 
+cluster inflation value for the given graph.
+
+Continuing from the previous example:
+
+```python
+# perform clustering using different inflation values from 1.5 and 2.5
+# for each clustering run, calculate the modularity
+for inflation in [i / 10 for i in range(15, 26)]:
+    result = mc.run_mcl(matrix, inflation=inflation)
+    clusters = mc.get_clusters(result)
+    Q = mc.modularity(matrix=result, clusters=clusters)
+    print("inflation:", inflation, "modularity:", Q)
+```
+
+```
+inflation: 1.5 modularity: 0.7256870762382928
+inflation: 1.6 modularity: 0.7432262129804642
+inflation: 1.7 modularity: 0.7859467455621318
+inflation: 1.8 modularity: 0.8030876061752096
+inflation: 1.9 modularity: 0.8194196576112109
+inflation: 2.0 modularity: 0.8262072262823568
+inflation: 2.1 modularity: 0.8339806510839622
+inflation: 2.2 modularity: 0.8307322929171664
+inflation: 2.3 modularity: 0.8272367770637663
+inflation: 2.4 modularity: 0.8274133182684847
+inflation: 2.5 modularity: 0.8279076336416934
+```
+
+From the output, we see that an inflation value of 2.1 gives the highest modularity score,
+so we will use that as our final cluster inflation parameter.
+
+```python
+# cluster using the optimized cluster inflation value
+result = mc.run_mcl(matrix, inflation=2.1)
+clusters = mc.get_clusters(result)
+mc.draw_graph(matrix, clusters, pos=positions, node_size=50, with_labels=False, edge_color="silver")
+```
+![best example](static/example_best.png)
