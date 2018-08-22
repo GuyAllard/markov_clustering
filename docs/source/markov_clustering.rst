@@ -12,6 +12,7 @@ markov\_clustering\.drawing module
     :undoc-members:
     :show-inheritance:
 
+
 markov\_clustering\.mcl module
 ------------------------------
 
@@ -19,6 +20,16 @@ markov\_clustering\.mcl module
     :members:
     :undoc-members:
     :show-inheritance:
+
+
+markov\_clustering\.modularity module
+-------------------------------------
+
+.. automodule:: markov_clustering.modularity
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 
 markov\_clustering\.utils module
 --------------------------------
