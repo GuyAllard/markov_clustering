@@ -1,4 +1,5 @@
 from .mcl import *
+from .modularity import *
 
 try:
     from .drawing import *
