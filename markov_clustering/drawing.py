@@ -1,16 +1,18 @@
 """
 Visualization of clusters
 """
+import sys
+
 try:
     import networkx as nx
 except ImportError:
-    print("Networkx not present")
+    sys.stderr.write("Networkx not present\n")
     raise
     
 try:
     from matplotlib.pylab import show, cm, axis
 except ImportError:
-    print("Matplotlib not present")
+    sys.stderr.write("Matplotlib not present\n")
     raise
 
 
