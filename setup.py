@@ -34,7 +34,7 @@ setup(
     python_requires='~=3.0',
     install_requires=[
         "numpy",
-        "scipy",
+        "scipy>=0.19.0",
         "scikit-learn",
     ],
     extras_require={
