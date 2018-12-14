@@ -1,3 +1,10 @@
 .cache
 markov_clustering.egg-info
 *__pycache__
+.coverage
+.idea
+.pytest_cache
+build
+dist
+tests/.coverage
+
