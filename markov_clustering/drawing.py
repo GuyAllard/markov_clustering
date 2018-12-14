@@ -2,18 +2,8 @@
 Visualization of clusters
 """
 import sys
-
-try:
-    import networkx as nx
-except ImportError:
-    sys.stderr.write("Networkx not present\n")
-    raise
-    
-try:
-    from matplotlib.pylab import show, cm, axis
-except ImportError:
-    sys.stderr.write("Matplotlib not present\n")
-    raise
+import networkx as nx
+from matplotlib.pylab import show, cm, axis
 
 
 def draw_graph(matrix, clusters, **kwargs):

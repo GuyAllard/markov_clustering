@@ -15,13 +15,11 @@ Details of the algorithm can be found on the [MCL homepage](https://micans.org/m
 
 ## Requirements
 
-- Core requirements
+- Requirements
   - Python 3.x
   - numpy
   - scipy
   - scikit-learn
-
-- Optional (required for visualization)
   - networkx
   - matplotlib 
 
@@ -33,12 +31,6 @@ Details of the algorithm can be found on the [MCL homepage](https://micans.org/m
 
 The recommended installation method is via pip.
 
-To install with all requirements including support for visualization:  
-```
-pip install markov_clustering[drawing]
-```
-
-To install with only support for the core MCL clustering:  
 ```
 pip install markov_clustering
 ```

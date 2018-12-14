@@ -1,7 +1,7 @@
 import numpy as np
 from scipy.sparse import isspmatrix, dok_matrix, csc_matrix
 import sklearn.preprocessing
-from .utils import MessagePrinter
+from markov_clustering.utils import MessagePrinter
 
 
 def sparse_allclose(a, b, rtol=1e-5, atol=1e-8):

@@ -36,10 +36,9 @@ setup(
         "numpy",
         "scipy>=0.19.0",
         "scikit-learn",
+        "networkx",
+        "matplotlib"
     ],
-    extras_require={
-        "drawing": ["networkx", "matplotlib"]
-    },
     entry_points={
     },
     classifiers=[

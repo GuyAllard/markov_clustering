@@ -7,7 +7,7 @@ from fractions import Fraction
 from itertools import permutations
 
 from scipy.sparse import isspmatrix, dok_matrix, find
-from .mcl import sparse_allclose
+from markov_clustering.mcl import sparse_allclose
 
 def is_undirected(matrix):
     """
