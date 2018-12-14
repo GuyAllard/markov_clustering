@@ -17,7 +17,7 @@ for line in open(os.path.join('markov_clustering', '__init__.py')):
     else:
         value = value.strip('\'"')
     distmeta[field] = value
-    
+
 long_description = "See {}".format(distmeta["__homepage__"])
 
 setup(
@@ -50,5 +50,5 @@ setup(
         "Topic :: Scientific/Engineering",
         "License :: OSI Approved :: MIT License",
     ],
-    keywords = "bioinformatics clustering"
+    keywords="bioinformatics clustering"
 )

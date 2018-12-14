@@ -1,6 +1,7 @@
 import pytest
 from markov_clustering.utils import MessagePrinter
 
+
 def test_message_printer_enabled(capfd):
     mp = MessagePrinter(enabled=True)
     msg = "hello universe"
@@ -33,4 +34,3 @@ def test_message_printer_disable(capfd):
     mp.print(msg)
     out, err = capfd.readouterr()
     assert out == ""
-
