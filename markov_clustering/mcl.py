@@ -137,7 +137,7 @@ def iterate(matrix, expansion, inflation):
     return matrix
 
 
-def get_clusters(matrix):
+def get_clusters(matrix, keep_overlap=False):
     """
     Retrieve the clusters from the matrix
     
@@ -161,7 +161,32 @@ def get_clusters(matrix):
         cluster = tuple(matrix.getrow(attractor).nonzero()[1].tolist())
         clusters.add(cluster)
 
-    return sorted(list(clusters))
+    # converting it to a list
+    clusters = sorted(list(clusters))
+
+    # checks for overlaping
+    clusters_total_size = sum(len(c) for c in clusters)
+
+    if matrix.shape[0] < clusters_total_size and keep_overlap == False:
+        print('The clustring produced contains overlapping that will be removed, \
+               to unable soft clustring make sure to set keep_overlap to True')
+
+        # set of all nodes
+        nodes = set(range(matrix.shape[0]))
+
+        # remove the overlapping nodes
+        for n, cluster in enumerate(clusters):
+            cluster = set(cluster)
+
+            if not cluster.issubset(nodes):
+                cluster = nodes.intersection(cluster)
+                clusters[n] = tuple(cluster)
+
+            nodes -= cluster
+
+    # getting ride of empty clusters
+    clusters = [c for c in clusters if len(c) > 0]
+    return clusters
 
 
 def run_mcl(matrix, expansion=2, inflation=2, loop_value=1,
