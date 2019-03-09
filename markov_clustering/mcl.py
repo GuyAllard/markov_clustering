@@ -168,8 +168,8 @@ def get_clusters(matrix, keep_overlap=False):
     clusters_total_size = sum(len(c) for c in clusters)
 
     if matrix.shape[0] < clusters_total_size and keep_overlap == False:
-        print('The clustring produced contains overlapping that will be removed, \
-               to unable soft clustring make sure to set keep_overlap to True')
+        print('The clustering produced contains overlapping that will be removed, \
+               to unable soft clustering make sure to set keep_overlap to True')
 
         # set of all nodes
         nodes = set(range(matrix.shape[0]))
