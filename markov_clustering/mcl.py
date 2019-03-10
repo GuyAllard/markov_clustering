@@ -142,6 +142,7 @@ def get_clusters(matrix, keep_overlap=False):
     Retrieve the clusters from the matrix
     
     :param matrix: The matrix produced by the MCL algorithm
+    :param keep_overlap: If true, unables soft clustering
     :returns: A list of tuples where each tuple represents a cluster and
               contains the indices of the nodes belonging to the cluster
     """
@@ -168,8 +169,9 @@ def get_clusters(matrix, keep_overlap=False):
     clusters_total_size = sum(len(c) for c in clusters)
 
     if matrix.shape[0] < clusters_total_size and keep_overlap == False:
-        print('The clustering produced contains overlapping that will be removed, \
-               to unable soft clustering make sure to set keep_overlap to True')
+
+        printer = MessagePrinter(True)
+        printer.print("Clustering contains overlapping, to unable soft clustering set keep_overlap to True")
 
         # set of all nodes
         nodes = set(range(matrix.shape[0]))
