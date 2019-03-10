@@ -186,8 +186,9 @@ def get_clusters(matrix, keep_overlap=False):
 
             nodes -= cluster
 
-    # getting ride of empty clusters
-    clusters = [c for c in clusters if len(c) > 0]
+        # getting ride of empty clusters
+        clusters = [c for c in clusters if len(c) > 0]
+
     return clusters
 
 
