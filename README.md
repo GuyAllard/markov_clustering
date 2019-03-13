@@ -11,6 +11,7 @@ Details of the algorithm can be found on the [MCL homepage](https://micans.org/m
 ## Features
 
 - Sparse matrix support
+- Soft clustering support
 - Pruning
 
 ## Requirements

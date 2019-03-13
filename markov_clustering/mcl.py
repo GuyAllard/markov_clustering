@@ -137,16 +137,51 @@ def iterate(matrix, expansion, inflation):
     return matrix
 
 
-def get_clusters(matrix):
+def delete_overlap(matrix, clusters):
+    """
+    Deletes duplicates of ovelapping nodes in the clusters
+
+    :param matrix: The matrix produced by the MCL algorithm
+    :param clusters: A list of clusters produced by get_clusters
+    :returns: A list clusters without duplicates of the overlapping nodes
+    """
+    clusters_total_size = sum(len(c) for c in clusters)
+
+    if matrix.shape[0] < clusters_total_size:
+        # checks for overlaping
+        printer = MessagePrinter(True)
+        printer.print("Clustering contains overlapping, to enable soft clustering set keep_overlap to True")
+
+        # set of all nodes
+        nodes = set(range(matrix.shape[0]))
+
+        # remove the overlapping nodes
+        for n, cluster in enumerate(clusters):
+            cluster = set(cluster)
+
+            if not cluster.issubset(nodes):
+                cluster = nodes.intersection(cluster)
+                clusters[n] = tuple(cluster)
+
+            nodes -= cluster
+
+        # getting ride of empty clusters
+        clusters = [c for c in clusters if len(c) > 0]
+
+    return clusters
+
+
+def get_clusters(matrix, keep_overlap=False):
     """
     Retrieve the clusters from the matrix
-    
+
     :param matrix: The matrix produced by the MCL algorithm
+    :param keep_overlap: If true, enables soft clustering
     :returns: A list of tuples where each tuple represents a cluster and
               contains the indices of the nodes belonging to the cluster
     """
     if not isspmatrix(matrix):
-        # cast to sparse so that we don't need to handle different 
+        # cast to sparse so that we don't need to handle different
         # matrix types
         matrix = csc_matrix(matrix)
 
@@ -161,7 +196,11 @@ def get_clusters(matrix):
         cluster = tuple(matrix.getrow(attractor).nonzero()[1].tolist())
         clusters.add(cluster)
 
-    return sorted(list(clusters))
+    # converting it to a list
+    clusters = sorted(list(clusters))
+    clusters = delete_overlap(matrix, clusters) if keep_overlap is False else clusters
+
+    return clusters
 
 
 def run_mcl(matrix, expansion=2, inflation=2, loop_value=1,
