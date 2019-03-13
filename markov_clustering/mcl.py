@@ -137,39 +137,18 @@ def iterate(matrix, expansion, inflation):
     return matrix
 
 
-def get_clusters(matrix, keep_overlap=False):
+def delete_overlap(matrix, clusters):
     """
-    Retrieve the clusters from the matrix
-    
+    Deletes duplicates of ovelapping nodes in the clusters
+
     :param matrix: The matrix produced by the MCL algorithm
-    :param keep_overlap: If true, enables soft clustering
-    :returns: A list of tuples where each tuple represents a cluster and
-              contains the indices of the nodes belonging to the cluster
+    :param clusters: A list of clusters produced by get_clusters
+    :returns: A list clusters without duplicates of the overlapping nodes
     """
-    if not isspmatrix(matrix):
-        # cast to sparse so that we don't need to handle different 
-        # matrix types
-        matrix = csc_matrix(matrix)
-
-    # get the attractors - non-zero elements of the matrix diagonal
-    attractors = matrix.diagonal().nonzero()[0]
-
-    # somewhere to put the clusters
-    clusters = set()
-
-    # the nodes in the same row as each attractor form a cluster
-    for attractor in attractors:
-        cluster = tuple(matrix.getrow(attractor).nonzero()[1].tolist())
-        clusters.add(cluster)
-
-    # converting it to a list
-    clusters = sorted(list(clusters))
-
-    # checks for overlaping
     clusters_total_size = sum(len(c) for c in clusters)
 
-    if matrix.shape[0] < clusters_total_size and keep_overlap == False:
-
+    if matrix.shape[0] < clusters_total_size:
+        # checks for overlaping
         printer = MessagePrinter(True)
         printer.print("Clustering contains overlapping, to enable soft clustering set keep_overlap to True")
 
@@ -188,6 +167,38 @@ def get_clusters(matrix, keep_overlap=False):
 
         # getting ride of empty clusters
         clusters = [c for c in clusters if len(c) > 0]
+
+    return clusters
+
+
+def get_clusters(matrix, keep_overlap=False):
+    """
+    Retrieve the clusters from the matrix
+
+    :param matrix: The matrix produced by the MCL algorithm
+    :param keep_overlap: If true, enables soft clustering
+    :returns: A list of tuples where each tuple represents a cluster and
+              contains the indices of the nodes belonging to the cluster
+    """
+    if not isspmatrix(matrix):
+        # cast to sparse so that we don't need to handle different
+        # matrix types
+        matrix = csc_matrix(matrix)
+
+    # get the attractors - non-zero elements of the matrix diagonal
+    attractors = matrix.diagonal().nonzero()[0]
+
+    # somewhere to put the clusters
+    clusters = set()
+
+    # the nodes in the same row as each attractor form a cluster
+    for attractor in attractors:
+        cluster = tuple(matrix.getrow(attractor).nonzero()[1].tolist())
+        clusters.add(cluster)
+
+    # converting it to a list
+    clusters = sorted(list(clusters))
+    clusters = delete_overlap(matrix, clusters) if keep_overlap is False else clusters
 
     return clusters
 
