@@ -34,7 +34,7 @@ def convert_to_adjacency_matrix(matrix):
         if isspmatrix(matrix):
             col = find(matrix[:,i])[2]
         else:
-            col = matrix[:,i].T.tolist()[0]
+            col = matrix[:,i].T.tolist()
 
         coeff = max( Fraction(c).limit_denominator().denominator for c in col )
         matrix[:,i] *= coeff
